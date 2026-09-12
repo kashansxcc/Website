@@ -126,6 +126,7 @@ function saveCart() {
 window.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
     updateShopCategoryCounts();
+    renderAuthNavSlot(); // from auth-state.js
 
     // Read ?category= from URL, if present (e.g. from Home page links)
     const params = new URLSearchParams(window.location.search);
@@ -136,6 +137,15 @@ window.addEventListener('DOMContentLoaded', () => {
         renderShopProducts();
     }
 });
+
+// Send the shopper to checkout — login first if needed
+function goToCheckout() {
+    if (getSession()) {
+        window.location.href = 'checkout.html';
+    } else {
+        window.location.href = 'auth.html?redirect=checkout.html';
+    }
+}
 
 // ==========================================
 // CATEGORIES COLLAPSIBLE ACCORDION LOGIC
@@ -441,22 +451,6 @@ function toggleCartDrawer(open) {
         overlay.classList.add('opacity-0', 'pointer-events-none');
         drawer.classList.add('translate-x-full');
     }
-}
-
-// Checkout Modal
-function openCheckoutModal() {
-    toggleCartDrawer(false);
-    document.getElementById('checkout-order-ref').innerText = `#PK-${Math.floor(1000 + Math.random() * 9000)}`;
-    const modal = document.getElementById('checkout-modal');
-    modal.classList.remove('opacity-0', 'pointer-events-none');
-    cart = [];
-    saveCart();
-    updateCartUI();
-}
-
-function closeCheckoutModal() {
-    const modal = document.getElementById('checkout-modal');
-    modal.classList.add('opacity-0', 'pointer-events-none');
 }
 
 // Mobile Nav Toggle
