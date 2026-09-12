@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login or Sign Up | Pastel & Knots</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="auth.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: { 50: '#FFF5F7', 100: '#FFE3EC', 200: '#FFC0D3', 300: '#FFA0B9', 400: '#FF809F', 500: '#FF5E85' },
+                        pastelPurple: { 50: '#F8F6FE', 100: '#EFEBFD', 200: '#DDD5FA', 300: '#C7B8F6', 400: '#B098F2', 500: '#9976ED' },
+                    },
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        display: ['Fredoka', 'cursive'],
+                    },
+                    boxShadow: {
+                        'card': '0 10px 30px rgba(216, 191, 216, 0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Simple top bar -->
+    <header class="p-6">
+        <a href="home.html" class="inline-flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pastelPink-300 via-pastelPurple-300 to-pink-200 flex items-center justify-center shadow-sm">
+                <i class="fa-solid fa-gem text-white text-lg"></i>
+            </div>
+            <span class="font-display text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">Pastel & Knots</span>
+        </a>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center px-4 pb-16">
+        <div class="w-full max-w-md bg-white/85 backdrop-blur-md rounded-3xl border border-pink-100 shadow-card p-8">
+
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center text-2xl mx-auto mb-3">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <h1 class="font-display text-2xl font-bold text-gray-800">Welcome to Pastel & Knots</h1>
+                <p class="text-xs text-gray-500 mt-1">Login or create an account to check out faster.</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex border-b border-pink-100 gap-6 text-sm font-bold text-gray-500 mb-6 justify-center">
+                <button type="button" onclick="switchAuthTab('login')" id="auth-tab-login" class="auth-tab pb-3 transition-all">Login</button>
+                <button type="button" onclick="switchAuthTab('signup')" id="auth-tab-signup" class="auth-tab pb-3 transition-all">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                <p id="login-error" class="hidden text-xs font-bold text-red-500 bg-red-50 border border-red-100 rounded-xl px-3 py-2"></p>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-gray-700">Email</label>
+                    <input type="email" id="login-email" required placeholder="you@example.com" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-gray-700">Password</label>
+                    <div class="relative">
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-4 py-3 pr-11 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                        <button type="button" onclick="togglePasswordVisibility('login-password', this.querySelector('i'))" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white font-bold shadow-md transition-all">
+                    Login
+                </button>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signup-form" onsubmit="handleSignupSubmit(event)" class="space-y-4 hidden">
+                <p id="signup-error" class="hidden text-xs font-bold text-red-500 bg-red-50 border border-red-100 rounded-xl px-3 py-2"></p>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-gray-700">Full Name</label>
+                    <input type="text" id="signup-name" required placeholder="Aiza Khan" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-gray-700">Email</label>
+                    <input type="email" id="signup-email" required placeholder="you@example.com" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-gray-700">Mobile Number</label>
+                    <input type="tel" id="signup-phone" required placeholder="03XXXXXXXXX" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-gray-700">Password</label>
+                    <div class="relative">
+                        <input type="password" id="signup-password" required minlength="6" placeholder="At least 6 characters" class="w-full px-4 py-3 pr-11 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                        <button type="button" onclick="togglePasswordVisibility('signup-password', this.querySelector('i'))" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-gray-700">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" required minlength="6" placeholder="Re-enter password" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white font-bold shadow-md transition-all">
+                    Create Account
+                </button>
+            </form>
+
+            <p class="text-center text-[11px] text-gray-400 mt-6">
+                By continuing you agree to our Terms of Craft & Privacy Policy.
+            </p>
+        </div>
+    </main>
+
+    <script src="auth-state.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

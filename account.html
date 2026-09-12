@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | Pastel & Knots</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="account.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: { 50: '#FFF5F7', 100: '#FFE3EC', 200: '#FFC0D3', 300: '#FFA0B9', 400: '#FF809F', 500: '#FF5E85' },
+                        pastelPurple: { 50: '#F8F6FE', 100: '#EFEBFD', 200: '#DDD5FA', 300: '#C7B8F6', 400: '#B098F2', 500: '#9976ED' },
+                    },
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        display: ['Fredoka', 'cursive'],
+                    },
+                    boxShadow: { 'card': '0 10px 30px rgba(216, 191, 216, 0.25)' }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Top bar -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/75 border-b border-pink-100/60">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="home.html" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pastelPink-300 via-pastelPurple-300 to-pink-200 flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-gem text-white text-lg"></i>
+                </div>
+                <span class="font-display text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">Pastel & Knots</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="products.html" class="text-xs font-bold text-gray-600 hover:text-pink-500">Continue Shopping</a>
+                <button onclick="handleLogout()" class="text-xs font-bold text-red-400 hover:text-red-500 flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+
+        <!-- Profile Card -->
+        <div class="bg-white/80 backdrop-blur-md rounded-3xl border border-pink-100 shadow-sm p-6 sm:p-8 flex items-center gap-5">
+            <div id="profile-initial" class="w-16 h-16 rounded-full bg-gradient-to-tr from-pink-300 to-purple-300 text-white font-display font-bold text-2xl flex items-center justify-center shadow-md shrink-0">
+                A
+            </div>
+            <div>
+                <h1 id="profile-name" class="font-display text-xl font-bold text-gray-800">Loading...</h1>
+                <p id="profile-email" class="text-xs text-gray-500"></p>
+                <p id="profile-phone" class="text-xs text-gray-500"></p>
+            </div>
+        </div>
+
+        <!-- Address Book -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- Saved Addresses -->
+            <div class="space-y-4">
+                <h2 class="font-display text-xl font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-pink-400"></i> Saved Addresses
+                </h2>
+                <div id="address-list" class="space-y-3">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Add New Address Form -->
+            <div class="space-y-4">
+                <h2 class="font-display text-xl font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fa-solid fa-plus text-purple-500"></i> Add a New Address
+                </h2>
+
+                <form id="add-address-form" onsubmit="handleAddAddressSubmit(event)" class="bg-white/80 backdrop-blur-md rounded-3xl border border-pink-100 shadow-sm p-6 space-y-4">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-gray-700">Full Name</label>
+                        <input type="text" id="addr-fullname" required placeholder="Recipient's full name" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-gray-700">Mobile Number</label>
+                        <input type="tel" id="addr-phone" required placeholder="03XXXXXXXXX" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-gray-700">Street Address</label>
+                        <textarea id="addr-line" required rows="2" placeholder="House #, street, area" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-gray-700">City</label>
+                            <input type="text" id="addr-city" required placeholder="Lahore" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-gray-700">Postal Code</label>
+                            <input type="text" id="addr-postal" placeholder="Optional" class="w-full px-4 py-3 rounded-2xl bg-white border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white font-bold shadow-md transition-all">
+                        Save Address
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="auth-state.js"></script>
+    <script src="account.js"></script>
+</body>
+</html>
