@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastel & Knots | Handcrafted Custom Bracelets, Necklaces & Charms</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Page Styles -->
+    <link rel="stylesheet" href="home.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: { 50: '#FFF5F7', 100: '#FFE3EC', 200: '#FFC0D3', 300: '#FFA0B9', 400: '#FF809F', 500: '#FF5E85' },
+                        pastelPurple: { 50: '#F8F6FE', 100: '#EFEBFD', 200: '#DDD5FA', 300: '#C7B8F6', 400: '#B098F2', 500: '#9976ED' },
+                        lavender: '#E6E6FA',
+                        thistle: '#D8BFD8',
+                        softCream: '#FFFDF9',
+                    },
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        display: ['Fredoka', 'cursive'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 25px -5px rgba(230, 200, 235, 0.45), 0 8px 10px -6px rgba(255, 192, 203, 0.3)',
+                        'glow': '0 0 20px rgba(255, 182, 193, 0.6)',
+                        'card': '0 10px 30px rgba(216, 191, 216, 0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-pastelPink-200 selection:text-pastelPurple-500">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/75 border-b border-pink-100/60 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+
+                <!-- Logo -->
+                <a href="home.html" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-pastelPink-300 via-pastelPurple-300 to-pink-200 flex items-center justify-center shadow-soft group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-gem text-white text-xl"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-display text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent tracking-wide">
+                            Pastel & Knots
+                        </span>
+                        <span class="text-xs text-purple-400 font-semibold tracking-widest uppercase -mt-1">Handcrafted Joy</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center space-x-8 font-medium">
+                    <a href="home.html" class="nav-link text-pink-500 font-bold transition-colors py-1 relative">Home</a>
+                    <a href="products.html" class="nav-link text-gray-700 hover:text-pink-500 transition-colors py-1 relative">Shop All</a>
+                    <a href="products.html?category=bracelets" class="nav-link text-gray-700 hover:text-pink-500 transition-colors py-1">Bracelets</a>
+                    <a href="products.html?category=necklaces" class="nav-link text-gray-700 hover:text-pink-500 transition-colors py-1">Necklaces</a>
+                    <a href="products.html?category=phone-charms" class="nav-link text-gray-700 hover:text-pink-500 transition-colors py-1">Phone Charms</a>
+                </nav>
+
+                <!-- Action Buttons & Cart -->
+                <div class="flex items-center gap-3">
+                    <button id="cart-btn" onclick="toggleCartDrawer(true)" class="relative p-3 rounded-full bg-pink-50 text-purple-700 hover:bg-pink-100/80 transition-all border border-pink-200/60 shadow-sm group">
+                        <i class="fa-solid fa-bag-shopping text-xl group-hover:scale-110 transition-transform"></i>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-pink-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm border-2 border-white transform scale-0 transition-transform duration-300">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-2xl bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-lg border-b border-pink-100 px-4 pt-2 pb-6 space-y-3 transition-all">
+            <a href="home.html" class="block py-2 px-3 rounded-xl hover:bg-pink-50 font-medium text-gray-700">Home</a>
+            <a href="products.html" class="block py-2 px-3 rounded-xl hover:bg-pink-50 font-medium text-gray-700">Shop All Collection</a>
+            <a href="products.html?category=bracelets" class="block py-2 px-3 rounded-xl hover:bg-pink-50 font-medium text-gray-700">Beaded Bracelets</a>
+            <a href="products.html?category=necklaces" class="block py-2 px-3 rounded-xl hover:bg-pink-50 font-medium text-gray-700">Beaded Necklaces</a>
+            <a href="products.html?category=phone-charms" class="block py-2 px-3 rounded-xl hover:bg-pink-50 font-medium text-gray-700">Phone Charms</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative pt-8 pb-16 md:py-20 overflow-hidden">
+            <div class="absolute -top-20 -left-20 w-80 h-80 bg-pink-200/50 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute top-1/3 -right-20 w-96 h-96 bg-purple-200/50 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+
+                    <!-- Left Hero Content -->
+                    <div class="space-y-6 text-center md:text-left">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-pink-200 shadow-sm text-xs md:text-sm text-purple-700 font-semibold animate-bounce">
+                            <span class="w-2 h-2 rounded-full bg-pink-400 animate-ping"></span>
+                            <i class="fa-solid fa-heart text-pink-400"></i> Handcrafted with Love & Soft Pastel Aesthetics
+                        </div>
+
+                        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight">
+                            Handcrafted <span class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-400 bg-clip-text text-transparent">Joy</span> for Your Everyday Style.
+                        </h1>
+
+                        <p class="text-gray-600 text-lg max-w-xl mx-auto md:mx-0 leading-relaxed">
+                            Soft-toned bead combinations, phone charms, and custom jewelry strands crafted with care for you and your besties. Wear your story in pastels.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 pt-2">
+                            <a href="products.html" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-pink-400 to-purple-400 text-white font-bold text-center shadow-lg shadow-pink-200 hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-bag-shopping"></i> Explore Shop Now
+                            </a>
+                            <a href="#categories" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white/80 backdrop-blur-sm border-2 border-purple-200 text-purple-700 font-bold text-center hover:bg-purple-50 hover:border-purple-300 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-layer-group text-pink-400"></i> View Categories
+                            </a>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="pt-6 grid grid-cols-3 gap-4 border-t border-purple-100/80">
+                            <div>
+                                <p class="font-display text-2xl font-bold text-purple-700">100%</p>
+                                <p class="text-xs text-gray-500 font-medium">Handmade</p>
+                            </div>
+                            <div>
+                                <p class="font-display text-2xl font-bold text-pink-500">3,200+</p>
+                                <p class="text-xs text-gray-500 font-medium">Happy Customers</p>
+                            </div>
+                            <div>
+                                <p class="font-display text-2xl font-bold text-purple-700">4.9 ★</p>
+                                <p class="text-xs text-gray-500 font-medium">Top Rated</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Hero Visual Card -->
+                    <div class="relative flex justify-center">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-pink-300 to-purple-300 rounded-3xl blur-2xl opacity-40 scale-95"></div>
+
+                        <div class="relative bg-white/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/80 shadow-card w-full max-w-md animate-float">
+                            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-pink-100 via-purple-50 to-pink-50 p-8 text-center border border-pink-100">
+                                <span class="absolute top-4 right-4 bg-white/90 backdrop-blur text-pink-600 text-xs font-bold px-3 py-1 rounded-full shadow-sm border border-pink-200">
+                                    ★ Bestseller
+                                </span>
+
+                                <!-- Bracelet Graphic SVG -->
+                                <div class="my-6 relative py-4">
+                                    <svg viewBox="0 0 300 120" class="w-full h-auto drop-shadow-md">
+                                        <path d="M 20 60 Q 150 110 280 60" fill="none" stroke="#D1D5DB" stroke-width="3" stroke-dasharray="4 2"/>
+                                        <circle cx="30" cy="58" r="11" fill="#FFC0D3" stroke="#FFF" stroke-width="2"/>
+                                        <circle cx="52" cy="65" r="11" fill="#E6E6FA" stroke="#FFF" stroke-width="2"/>
+                                        <circle cx="74" cy="71" r="11" fill="#D8BFD8" stroke="#FFF" stroke-width="2"/>
+                                        <circle cx="96" cy="76" r="11" fill="#FFFDF9" stroke="#FFF" stroke-width="2"/>
+
+                                        <rect x="112" y="71" width="18" height="18" rx="4" fill="#FFF" stroke="#E2E8F0" stroke-width="1.5"/>
+                                        <text x="121" y="84" font-family="Fredoka" font-size="12" font-weight="bold" fill="#6B7280" text-anchor="middle">L</text>
+
+                                        <rect x="133" y="73" width="18" height="18" rx="4" fill="#FFF" stroke="#E2E8F0" stroke-width="1.5"/>
+                                        <text x="142" y="86" font-family="Fredoka" font-size="12" font-weight="bold" fill="#6B7280" text-anchor="middle">O</text>
+
+                                        <rect x="154" y="73" width="18" height="18" rx="4" fill="#FFF" stroke="#E2E8F0" stroke-width="1.5"/>
+                                        <text x="163" y="86" font-family="Fredoka" font-size="12" font-weight="bold" fill="#6B7280" text-anchor="middle">V</text>
+
+                                        <rect x="175" y="71" width="18" height="18" rx="4" fill="#FFF" stroke="#E2E8F0" stroke-width="1.5"/>
+                                        <text x="184" y="84" font-family="Fredoka" font-size="12" font-weight="bold" fill="#6B7280" text-anchor="middle">E</text>
+
+                                        <circle cx="204" cy="76" r="11" fill="#FFFDF9" stroke="#FFF" stroke-width="2"/>
+                                        <circle cx="226" cy="71" r="11" fill="#C7B8F6" stroke="#FFF" stroke-width="2"/>
+                                        <circle cx="248" cy="65" r="11" fill="#FFC0D3" stroke="#FFF" stroke-width="2"/>
+                                        <circle cx="270" cy="58" r="11" fill="#E6E6FA" stroke="#FFF" stroke-width="2"/>
+
+                                        <path d="M 163 91 L 163 100 M 163 108 L 157 101 A 4 4 0 0 1 169 101 Z" fill="#FBBF24" stroke="#F59E0B" stroke-width="1"/>
+                                    </svg>
+                                </div>
+
+                                <div class="text-left space-y-1">
+                                    <h3 class="font-display font-semibold text-lg text-gray-800">The "Pastel Dream" Stack</h3>
+                                    <p class="text-xs text-purple-600 font-medium">Soft Lilac • Pearl White • Rose Quartz</p>
+                                    <div class="flex items-center justify-between pt-3">
+                                        <span class="font-display font-bold text-xl text-gray-800">$14.99</span>
+                                        <a href="products.html" class="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5">
+                                            <i class="fa-solid fa-eye"></i> View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section id="categories" class="py-16 bg-gradient-to-b from-transparent via-white/60 to-transparent">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-pink-500 font-bold uppercase text-xs tracking-wider">Explore By Style</span>
+                    <h2 class="font-display text-3xl sm:text-4xl font-bold text-gray-800 mt-1">Shop Our Handcrafted Categories</h2>
+                    <p class="text-gray-600 mt-2">Discover soft pastel aesthetic accessories tailored for your everyday outfits.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Category 1: Beaded Bracelets -->
+                    <a href="products.html?category=bracelets" class="group cursor-pointer bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-pink-200 shadow-sm hover:shadow-card hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between">
+                        <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-pink-100 rounded-full blur-2xl group-hover:bg-pink-200 transition-colors"></div>
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-300 to-pink-400 flex items-center justify-center text-white text-2xl shadow-md mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-gem"></i>
+                            </div>
+                            <h3 class="font-display font-bold text-xl text-gray-800 group-hover:text-pink-500 transition-colors">Beaded Bracelets</h3>
+                            <p class="text-xs text-gray-500 mt-2 leading-relaxed">Elegant stretch bracelets, friendship stacks, and pastel pearl wristwear crafted with love.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between text-xs font-bold text-pink-500 pt-4 border-t border-pink-50">
+                            <span>Browse Bracelets</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+
+                    <!-- Category 2: Beaded Necklaces -->
+                    <a href="products.html?category=necklaces" class="group cursor-pointer bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-purple-200 shadow-sm hover:shadow-card hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between">
+                        <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-purple-100 rounded-full blur-2xl group-hover:bg-purple-200 transition-colors"></div>
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-300 to-purple-400 flex items-center justify-center text-white text-2xl shadow-md mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <h3 class="font-display font-bold text-xl text-gray-800 group-hover:text-purple-600 transition-colors">Beaded Necklaces</h3>
+                            <p class="text-xs text-gray-500 mt-2 leading-relaxed">Charming statement chokers, floral bead strands, and dainty pastel pendants.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between text-xs font-bold text-purple-600 pt-4 border-t border-purple-50">
+                            <span>Browse Necklaces</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+
+                    <!-- Category 3: Phone Charms -->
+                    <a href="products.html?category=phone-charms" class="group cursor-pointer bg-white/80 backdrop-blur-md rounded-3xl p-6 border border-pink-200 shadow-sm hover:shadow-card hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between">
+                        <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-pink-100 rounded-full blur-2xl group-hover:bg-pink-200 transition-colors"></div>
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-400 to-purple-400 flex items-center justify-center text-white text-2xl shadow-md mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+                            <h3 class="font-display font-bold text-xl text-gray-800 group-hover:text-pink-500 transition-colors">Phone Charms</h3>
+                            <p class="text-xs text-gray-500 mt-2 leading-relaxed">Cute phone wristlets, aesthetic keychains, and beaded camera straps with bow and heart accents.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between text-xs font-bold text-pink-500 pt-4 border-t border-pink-50">
+                            <span>Browse Phone Charms</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Highlights -->
+        <section class="py-16 bg-white/40 border-y border-pink-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+                    <div>
+                        <span class="text-pink-500 font-bold uppercase text-xs tracking-wider">Handcrafted Picks</span>
+                        <h2 class="font-display text-3xl font-bold text-gray-800 mt-1">Trending This Week</h2>
+                    </div>
+                    <a href="products.html" class="mt-4 md:mt-0 inline-flex items-center gap-2 text-sm font-bold text-purple-600 hover:text-purple-800">
+                        See All Products in Shop <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div id="home-featured-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Shopping Cart Drawer Overlay & Panel -->
+    <div id="cart-drawer-overlay" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <div id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+
+        <!-- Cart Header -->
+        <div class="p-6 border-b border-pink-100 flex items-center justify-between bg-pink-50/50">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-bag-shopping text-pink-500"></i>
+                <h3 class="font-display font-bold text-xl text-gray-800">Your Cart Bag</h3>
+            </div>
+            <button onclick="toggleCartDrawer(false)" class="p-2 rounded-full hover:bg-white text-gray-400 hover:text-gray-600 transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List Container -->
+        <div id="cart-items-container" class="p-6 overflow-y-auto flex-grow space-y-4">
+            <!-- Dynamically populated -->
+        </div>
+
+        <!-- Cart Footer / Checkout -->
+        <div class="p-6 border-t border-pink-100 bg-white space-y-4">
+            <div class="space-y-1.5 text-sm">
+                <div class="flex justify-between text-gray-500">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal" class="font-semibold text-gray-800">$0.00</span>
+                </div>
+                <div class="flex justify-between text-gray-500">
+                    <span>Handmade Packing & Ship</span>
+                    <span id="cart-shipping" class="font-semibold text-gray-800">$3.50</span>
+                </div>
+                <div class="flex justify-between text-base font-bold text-purple-800 pt-2 border-t border-gray-100">
+                    <span>Total Amount</span>
+                    <span id="cart-total" class="font-display text-xl text-pink-600">$0.00</span>
+                </div>
+            </div>
+
+            <button onclick="openCheckoutModal()" id="checkout-btn" class="w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold shadow-lg shadow-pink-200 hover:shadow-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span>Proceed to Checkout</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Checkout Confirmation Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center relative border border-pink-100 shadow-card">
+            <div class="w-16 h-16 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center text-3xl mx-auto mb-4 animate-bounce">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <h3 class="font-display text-2xl font-bold text-gray-800">Order Placed with Love!</h3>
+            <p class="text-gray-600 text-sm mt-2">
+                Thank you for supporting small handmade businesses! Your unique pastel creation is being queued for crafting.
+            </p>
+            <div class="my-6 p-4 rounded-2xl bg-purple-50 text-xs text-purple-700 font-medium text-left space-y-1">
+                <p>📦 Order Ref: <span id="checkout-order-ref" class="font-bold">#PK-8492</span></p>
+                <p>💌 Updates will be sent to your email.</p>
+            </div>
+            <button onclick="closeCheckoutModal()" class="w-full py-3.5 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold transition-all">
+                Back to Pastel Studio
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-white/80 border-t border-pink-100 pt-16 pb-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+
+                <!-- Brand info -->
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-pink-300 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-gem text-sm"></i>
+                        </div>
+                        <span class="font-display text-xl font-bold text-gray-800">Pastel & Knots</span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Handcrafted custom jewelry and accessories made with love, pastel beads, and positive energy for everyday aesthetic wear.
+                    </p>
+                    <div class="flex space-x-3 text-purple-400">
+                        <a href="javascript:void(0)" class="w-9 h-9 rounded-full bg-pink-50 hover:bg-pink-100 flex items-center justify-center hover:text-pink-600 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="javascript:void(0)" class="w-9 h-9 rounded-full bg-pink-50 hover:bg-pink-100 flex items-center justify-center hover:text-pink-600 transition-all"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="javascript:void(0)" class="w-9 h-9 rounded-full bg-pink-50 hover:bg-pink-100 flex items-center justify-center hover:text-pink-600 transition-all"><i class="fa-brands fa-pinterest"></i></a>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div>
+                    <h4 class="font-display font-semibold text-gray-800 text-sm mb-3">Shop Quick Navigation</h4>
+                    <ul class="space-y-2 text-xs text-gray-500">
+                        <li><a href="home.html" class="hover:text-pink-500 transition-colors">Home Studio</a></li>
+                        <li><a href="products.html" class="hover:text-pink-500 transition-colors">Shop All Products</a></li>
+                        <li><a href="products.html?category=bracelets" class="hover:text-pink-500 transition-colors">Beaded Bracelets</a></li>
+                        <li><a href="products.html?category=necklaces" class="hover:text-pink-500 transition-colors">Beaded Necklaces</a></li>
+                        <li><a href="products.html?category=phone-charms" class="hover:text-pink-500 transition-colors">Phone Charms</a></li>
+                    </ul>
+                </div>
+
+                <!-- Care Guide -->
+                <div>
+                    <h4 class="font-display font-semibold text-gray-800 text-sm mb-3">Item Care Guide</h4>
+                    <ul class="space-y-2 text-xs text-gray-500">
+                        <li>✦ Avoid submerging in harsh water</li>
+                        <li>✦ Roll bracelets onto wrists gently</li>
+                        <li>✦ Keep phone charms free of high-pull strain</li>
+                        <li>✦ Store in a soft pastel pouch</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-pink-100/60 text-center text-xs text-gray-400 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>© 2026 Pastel & Knots Studio. Handmade with 💕</p>
+                <div class="flex gap-4">
+                    <a href="javascript:void(0)" class="hover:text-gray-600">Privacy Policy</a>
+                    <a href="javascript:void(0)" class="hover:text-gray-600">Terms of Craft</a>
+                    <a href="javascript:void(0)" class="hover:text-gray-600">Shipping Info</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Page Script -->
+    <script src="home.js"></script>
+</body>
+</html>
