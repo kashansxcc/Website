@@ -74,6 +74,10 @@
 
                 <!-- Action Buttons & Cart -->
                 <div class="flex items-center gap-3">
+                    <div id="auth-nav-slot" class="hidden sm:block px-3 py-2 rounded-full bg-purple-50 border border-purple-100/60">
+                        <!-- Populated by JS: Login link or "Hi, Name" -->
+                    </div>
+
                     <button id="cart-btn" onclick="toggleCartDrawer(true)" class="relative p-3 rounded-full bg-pink-50 text-purple-700 hover:bg-pink-100/80 transition-all border border-pink-200/60 shadow-sm group">
                         <i class="fa-solid fa-bag-shopping text-xl group-hover:scale-110 transition-transform"></i>
                         <span id="cart-badge" class="absolute -top-1 -right-1 bg-pink-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm border-2 border-white transform scale-0 transition-transform duration-300">0</span>
@@ -94,6 +98,7 @@
             <a href="products.html?category=bracelets" class="block py-2 px-3 rounded-xl hover:bg-pink-50 font-medium text-gray-700">Beaded Bracelets</a>
             <a href="products.html?category=necklaces" class="block py-2 px-3 rounded-xl hover:bg-pink-50 font-medium text-gray-700">Beaded Necklaces</a>
             <a href="products.html?category=phone-charms" class="block py-2 px-3 rounded-xl hover:bg-pink-50 font-medium text-gray-700">Phone Charms</a>
+            <a href="account.html" class="block py-2 px-3 rounded-xl hover:bg-pink-50 font-medium text-gray-700"><i class="fa-solid fa-circle-user text-pink-400 mr-1.5"></i>My Account / Login</a>
         </div>
     </header>
 
@@ -253,32 +258,12 @@
                 </div>
             </div>
 
-            <button onclick="openCheckoutModal()" id="checkout-btn" class="w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold shadow-lg shadow-pink-200 hover:shadow-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+            <button onclick="goToCheckout()" id="checkout-btn" class="w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold shadow-lg shadow-pink-200 hover:shadow-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                 <span>Proceed to Checkout</span>
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
 
-    </div>
-
-    <!-- Checkout Confirmation Modal -->
-    <div id="checkout-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center relative border border-pink-100 shadow-card">
-            <div class="w-16 h-16 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center text-3xl mx-auto mb-4 animate-bounce">
-                <i class="fa-solid fa-heart"></i>
-            </div>
-            <h3 class="font-display text-2xl font-bold text-gray-800">Order Placed with Love!</h3>
-            <p class="text-gray-600 text-sm mt-2">
-                Thank you for supporting small handmade businesses! Your unique pastel creation is being queued for crafting.
-            </p>
-            <div class="my-6 p-4 rounded-2xl bg-purple-50 text-xs text-purple-700 font-medium text-left space-y-1">
-                <p>📦 Order Ref: <span id="checkout-order-ref" class="font-bold">#PK-8492</span></p>
-                <p>💌 Updates will be sent to your email.</p>
-            </div>
-            <button onclick="closeCheckoutModal()" class="w-full py-3.5 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold transition-all">
-                Back to Pastel Studio
-            </button>
-        </div>
     </div>
 
     <!-- Footer -->
@@ -341,6 +326,7 @@
     </footer>
 
     <!-- Page Script -->
+    <script src="auth-state.js"></script>
     <script src="products.js"></script>
 </body>
 </html>
